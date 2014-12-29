@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="procurement_wiz_tree_view" model="ir.ui.view">
+            <field name="name">procurement.wizard.tree</field>
+            <field name="model">procurement.wizard</field>
+            <field name="arch" type="xml">
+                <tree string="Procurement Lines">
+                    <field name="date_planned" widget="date"/>
+                    <field name="origin"/>
+                    <field name="product_id"/>
+                    <field name="product_qty"/>
+                    <field name="product_uom" string="Unit of Measure"/>
+                    <footer>
+                        <button name="action_create_procurements" string="Create"
+                            colspan="1" type="object" class="oe_highlight"  />
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </tree>
+            </field>
+        </record>
+
+        <record id="procurement_wiz_form_view" model="ir.ui.view">
+            <field name="name">procurement.wizard.form</field>
+            <field name="model">procurement.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Procurement">
+                    <sheet>
+                        <group>
+                        <group>
+                            <field name="product_id" on_change="product.onchange_product_id(product_id)"/>
+                            <label for="product_qty"/>
+                            <div>
+                                <div>
+                                    <field name="product_qty" class="oe_inline"/>
+                                    <field name="product_uom" class="oe_inline" groups="product.group_uom"/>
+                                </div>
+                            </div>
+                            <label for="product_uos_qty" groups="product.group_uos"/>
+                            <div groups="product.group_uos">
+                                <field name="product_uos_qty" class="oe_inline"/>
+                                <field name="product_uos" class="oe_inline"/>
+                            </div>
+                        </group>
+                        <group name="scheduling" string="Scheduling">
+                            <field name="date_planned"/>
+                            <field name="priority"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Notes">
+                            <label for="name" class="oe_edit_only"/>
+                            <field name="name" placeholder="External note..."/>
+                        </page>
+                        <page string="Extra Information">
+                            <group>
+                                <group>
+                                    <field name="origin" placeholder="e.g. SO005"/>
+                                    <field name="group_id" groups="base.group_no_one"/>
+                                </group>
+                                <group>
+                                    <field name="rule_id"/>
+                                    <field name="company_id" groups="base.group_multi_company" widget="selection"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="do_view_procurement_wiz" model="ir.actions.act_window">
+            <field name="name">Procurement wizard</field>
+            <field name="res_model">procurement.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('group_id','=',active_id)]</field>
+        </record>
+
+        <record id="procurement_wiz_action" model="ir.actions.act_window">
+            <field name="name">Procurement Orders</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">procurement.wizard</field>
+            <field name="view_type">tree</field>
+
+        </record>
+    </data>
+</openerp>
